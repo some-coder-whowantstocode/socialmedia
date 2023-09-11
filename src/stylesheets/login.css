@@ -1,0 +1,67 @@
+.loginboxes{
+    transition-property: opacity,left,right,top,bottom;
+    transition-duration: 1.5s,2s,2s,2s,2s;
+    /* transition-delay: 0.5s; */
+}
+.one{
+    left: 0px;
+    
+}
+.anotherone{
+    right: 0px;
+}
+.another{
+    left: 350px;
+}
+.right{
+    right:350px;
+}
+.invisible{
+    opacity: 0;
+
+}
+.visible{
+    opacity: 1;
+}
+@media (max-width:730px) {
+    .invisiblep{
+        display: none;
+    }
+    .invisibleq{
+        float: top;
+    }
+    .visibleq{
+        display: none;
+    }
+    /* .visiblep{
+        display: block;
+    } */
+    .invisible{
+        
+        opacity: 0;
+    }
+    .visible{
+       opacity: 1;
+       
+    }
+    .one{
+       top: 5%;
+        
+    }
+    .anotherone{
+       top: 9%;
+    }
+    .another{
+        position: absolute;
+        left: 0;
+      top: -200%;
+    }
+    .right{
+        /* left: auto; */
+        position: absolute;
+        right:0;
+       top: -200%;
+    }
+  
+}
+

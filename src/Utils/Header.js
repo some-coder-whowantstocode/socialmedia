@@ -1,9 +1,8 @@
 import React from 'react'
-function Header() {
+export const Header=()=> {
     return {
         'Content-Type': 'application/json',
         'authorization': sessionStorage.getItem('sstoken')
     }
 }
 
-export default Header

@@ -7,3 +7,16 @@
 .Alex{
     font-family: 'Dancing script', cursive;
 }
+.searchprof{
+    border-radius: 50px;
+    background: #ffffff;
+    box-shadow: inset 5px 5px 8px #f2f2f2,
+                inset -5px -5px 8px #ffffff;
+}
+
+.card{
+    border-radius: 48px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    box-shadow:  7px 7px 14px #b3b3b3,
+                 -7px -7px 14px #ffffff;
+}

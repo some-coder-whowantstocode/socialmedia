@@ -11,3 +11,13 @@ root.render(
     </HashRouter>
 );
 
+/*
+did {
+    remove chat not completely only from one side does not mean that they are permanently deleted
+}
+todo{
+    delete messages individually 
+    if all the users removed the chat make it deleted permanently
+    
+}
+*/
