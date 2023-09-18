@@ -48,7 +48,6 @@ const Videochat = () => {
 // first get usermedia when user enters the call 
 
   useEffect(()=>{
-    try{
       
       const getusermedia =async()=>{
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -57,9 +56,7 @@ const Videochat = () => {
         })
         setmystream(stream)
       }
-    }catch(error){
-      console.log(error)
-    }
+   
       getusermedia()
   },[])
 
