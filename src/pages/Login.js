@@ -24,8 +24,7 @@ const Login = () => {
  
   const loge = async () => {
     err.current.innerText = "";
-    console.log(email.current.value);
-    console.log(password.current.value);
+  
     try {
       const e = await email.current.value;
       const p = await password.current.value;
@@ -43,11 +42,9 @@ const Login = () => {
         data,
         {headers:header}
       );
-      console.log(login);
       sessionStorage.setItem("name", login.data.user.name);
       const { token } = login.data;
       if (token) {
-        console.log(token)
         sessionStorage.setItem("sstoken", "Bearer " + token);
         setLoad("invisible");
 
@@ -63,10 +60,6 @@ const Login = () => {
       }
     }
   };
-
-  useEffect(() => {
-    console.log(load);
-  }, [load]);
 
 
 

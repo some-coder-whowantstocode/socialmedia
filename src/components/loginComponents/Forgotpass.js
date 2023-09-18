@@ -29,9 +29,7 @@ const Forgotpass = () => {
       const forgotpassurl = `${url}/socialmedia/api/v1/forgotpassword`;
       let dat = await axios.post(forgotpassurl, data, headers);
       window.location.replace(dat.data.link);
-      console.log(dat.data.link);
     } catch (err) {
-      // console.log(err)
       if (err.response) {
         errore.current.textContent = err.response.data.msg
           ? err.response.data.msg

@@ -17,6 +17,7 @@ import { messageContext } from "../../context/Api/MessageContext";
 import { Header } from "../../Utils/Header";
 import { BsCameraVideoFill } from "react-icons/bs";
 import { friendApiContext } from "../../context/Api/FriendContext";
+import Videochat from "../../pages/Videochat";
 
 
 
@@ -33,7 +34,8 @@ const Chat = () => {
   const [chatname, setchatname] = useState();
   const [chatid, setchatid] = useState();
   const [msgs, setmsg] = useState([]);
-  const [vis,setvis] = useState('invisible')
+  const [vis,setvis] = useState('invisible');
+  const [remotesocketid,setremotesocketid] = useState(null)
   const location = useLocation();
 
 
@@ -49,19 +51,16 @@ const Chat = () => {
 
   useEffect(() => {
     pageref.current.scrollIntoView({ behavior: "smooth" });
-    console.log(msgs)
   }, [msgs]);
 
 
   useEffect(() => {
     try{
-      console.log(location.state);
       let chat = location.state.chat;
       setchatid(chat._id);
       setchatname(location.state.name);
     }catch(error)
     {
-      console.log(error)
     }
    
   }, [location.state]);
@@ -73,7 +72,6 @@ const Chat = () => {
   }, [chatid]);
 
   const handlenewmessage = useCallback((data) => {
-    // console.log(data)
    let {message} = data;
    let d = message.data
     setmsg((msgs) => [...msgs, d]);
@@ -90,30 +88,48 @@ const Chat = () => {
   ,[])
 
   const handeljoincall=async()=>{
-    let user  = await getfriend(id);
-    // console.log(user.Email)
-    socket.emit('user:join',{user:user.Email,room:chatid})
+    if(id){
+      let user  = await getfriend(id);
+      socket.emit('user:join',{user:user.Email,room:chatid})
+    }
+    
   }
+
   const navigate = useNavigate()
   const handleuserjoin =useCallback( async({room})=>{
     navigate(`/videochat/${room}`)
   },[navigate])
 
+  // const handleuserjoin = useCallback(async({user,socketid})=>{
+  
+
+  //   setremotesocketid(socketid)
+  // },[])
+
+  const handlepong = (data)=>{
+    socket.emit('pong', {beat: 1});
+  }
+
   useEffect(() => {
     socket.on("receive_message", handlenewmessage );
     socket.on("deleted_message", handledeletedmessage );
     socket.on('user:join',handleuserjoin)
+    socket.on('ping', handlepong);
+    // socket.on('user:joined',handleuserjoin)
+
 
     return ()=>{
       socket.off("receive_message", handlenewmessage );
       socket.off("deleted_message", handledeletedmessage );
       socket.off('user:join',handleuserjoin)
+    socket.off('ping', handlepong);
+    // socket.off('user:joined',handleuserjoin)
+
     }
   }, [socket]);
 
   const send = async () => {
     let content = msg.current.value;
-    // console.log(content)
     msg.current.value = "";
     if (content != "" && chatid) {
       try {
@@ -139,6 +155,14 @@ const Chat = () => {
 
 
 
+  // for video call
+
+
+
+  // 
+
+
+
 
   return (
     <div className="flex relative">
@@ -146,22 +170,23 @@ const Chat = () => {
       <Nav  />
       </div>
       
-      <div className="grow w-rest z-10000 ">
+      <div className="grow w-rest">
        
-        <div className="flex relative items-center justify-center bg-white h-9 shadow-lg  ">
+        <div className="flex fixed top-0 items-center z-50 max-[730px]:w-screen w-rest justify-center bg-white h-9 shadow-lg  ">
         <NavLink
         to={'/messages'}
-        className={'min-[731px]:hidden w-fit max-[730px]:absolute max-[730px]:top-2 max-[730px]:left-1'}
+        className={'min-[731px]:hidden  max-[730px]:absolute max-[730px]:top-2 max-[730px]:left-1'}
         >
-        <BiArrowBack className="  " fontSize={'19px'}/>
+        <BiArrowBack className=" absolute left-0 z-50" fontSize={'19px'}/>
         </NavLink>
           {chatname && chatname}
           <div className="absolute right-3 top-3">
           {/* <div className=' cursor-pointer ' onClick={()=>setvis(Changevis(vis))}><BsThreeDotsVertical/></div> */}
-          <BsCameraVideoFill className=" cursor-pointer" onClick={handeljoincall}/>
-          <div className={`bg-white border border-gray-400 rounded-md p-1 ${vis}`}>
+          <BsCameraVideoFill onClick={handeljoincall} className=" cursor-pointer min-[750px]:mr-5" />
+          {/* <Videochat/> */}
+          {/* <div className={`bg-white border border-gray-400 rounded-md p-1 ${vis}`}>
             <div className={` text-red-500 cursor-pointer z-50`} onClick={()=>deletechat(chatid)}>delete</div>
-          </div>
+          </div> */}
           </div>
 
         </div>
@@ -172,14 +197,14 @@ const Chat = () => {
             )}
         </div>
 
-        <div className="flex items-center fixed bottom-5 w-rest justify-center">
+        <div className="flex items-center fixed bottom-5 min-[750px]:w-rest z-50 justify-center  max-[730px]:left-0">
           <input
-            className=" max-[730px]:w-screen max-[730px]:h-9  w-msg rounded-md focus:outline-none border border-black"
+            className=" max-[730px]:w-Mesg max-[730px]:h-9  w-msg rounded-md focus:outline-none border border-black"
             onKeyDown={checksend}
             type="text"
             ref={msg}
           />
-          <AiOutlineSend className=" cursor-pointer max-[730px]:absolute max-[730px]:right-2 " onClick={send} />
+          <AiOutlineSend className=" cursor-pointer max-[730px]:absolute max-[730px]:right-2  z-50" onClick={send} />
         </div>
 
         <div ref={pageref}></div>

@@ -17,20 +17,14 @@ const Anotherprofile = () => {
   const [load, setload] = useState("invisible");
   const [iload, setiload] = useState("invisible");
 
-  useEffect(() => {
-    console.log(friends);
-  }, [friends]);
-
   // another user data
 
   useEffect(() => {
     setname(location.state.name);
     setid(location.state.id);
     let a = location.state.friends;
-    console.log(a);
     setfriends(a);
     setme(location.state.me);
-    console.log(location.state);
   }, [location.state]);
 
   const [pro, setpro] = useState();

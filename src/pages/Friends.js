@@ -18,12 +18,6 @@ const Friends = () => {
 
   }, [location.state]);
 
-  // useEffect(() => {
-  //   friends.map((friend) => {
-  //     console.log(friend);
-  //   });
-  // }, [friends]);
-
   return (
     <div className="flex">
       <Nav />

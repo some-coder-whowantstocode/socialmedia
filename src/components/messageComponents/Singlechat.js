@@ -45,14 +45,6 @@ const Singlechat = ({ chat }) => {
     }
   },[chatdetails])
 
-
-  // useEffect(()=>{
-  //   socket.on('receive_message',getchatdetails);
-  //   return()=>{
-  //     socket.off('receive_message',getcha);
-  //   }
-  // },[socket])
-
   useEffect(() => {
     if (Idd) {
      getchatdetails(chat,Idd)

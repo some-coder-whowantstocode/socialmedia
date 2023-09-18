@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { urlContext } from "../../context/UrlContex";
+import { BiLoader } from "react-icons/bi";
 
 const Dob = () => {
   const err = useRef();
 
   const {url} = useContext(urlContext)
-
+  const [load,setload] = useState(false)
   const [yearlist, setyearlist] = useState([]);
   const [mon, setmon] = useState();
   const [selyear, setselyear] = useState();
@@ -30,8 +31,18 @@ const Dob = () => {
   const [data, setdata] = useState();
   const [curdate, setcurdate] = useState();
 
+  useEffect(()=>{
+    const d = new Date();
+    let a  = d.getDate()
+    let b = d.getFullYear()
+    let c = d.getMonth()
+    console.log(a,b,c)
+    setcurdate(a)
+    setselyear(b)
+    setmon(c)
+  },[])
+
   let location = useLocation();
-  console.log(location.state);
 
   const navigate = useNavigate();
 
@@ -43,29 +54,39 @@ const Dob = () => {
   const sign = async (req, res) => {
     err.current.innerText = "";
     try {
+      setload(true)
       let today = new Date();
-      if (curdate != today) {
+      
         let dat = data;
         let headers = header;
-        console.log(selyear, mon, curdate);
         let date = new Date(selyear, mon, curdate);
-        console.log(date);
         dat.dob = date;
+        console.log(date)
 
         const register = await axios.post(
           `${url}/socialmedia/api/v1/register`,
           dat,
           headers
         );
-        // console.log(register);
-        let token = register.data && url.data.jwttoken;
+        console.log(register)
+        let token = register.data?.jwttoken;
+        console.log(token)
         sessionStorage.setItem("name", register.data.username);
         sessionStorage.setItem("sstoken", "Bearer " + token);
-        // console.log(register);
         navigate("/");
-      }
+      setload(false)
     } catch (error) {
-      console.log(error);
+      setload(false)
+      console.log(error)
+      let m =  error?.response?.data
+      if( m?.msg )
+      {
+        err.current.innerText = m.msg 
+      }else{
+        err.current.innerText = m.message
+
+      }
+
       // err.current.innerText = err.response.data ? err.response.data.msg : 'something went wrong.'
     }
   };
@@ -73,7 +94,7 @@ const Dob = () => {
   useEffect(() => {
     const year = new Date().getFullYear();
     setselyear(year);
-    let years = Array.from(new Array(20), (val, index) => year - index);
+    let years = Array.from(new Array(50), (val, index) => year - index);
     setyearlist(years);
     const month = new Date().getMonth();
     setmon(month);
@@ -88,7 +109,6 @@ const Dob = () => {
   }, []);
 
   useEffect(() => {
-    console.log(mon, selyear);
     let year = Number(selyear);
     const date = new Date(year, mon, 1);
     let dates = new Array(0);
@@ -166,12 +186,24 @@ const Dob = () => {
             Use your own birthday, even if this account is for a business, a
             pet, or something else
           </div>
+          {
+
+          load ? 
+          
+          <div
+          onClick={sign}
+          className=" bg-blue-600 text-white w-ibox h-ibox rounded my-3"
+        >
+          please wait
+        </div>
+          :
           <button
             onClick={sign}
             className=" bg-blue-600 text-white w-ibox h-ibox rounded my-3"
           >
             Next
           </button>
+          }
           <NavLink
             className={"text-blue-700 font-bold hover:text-black"}
             to={"/login"}

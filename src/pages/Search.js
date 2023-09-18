@@ -1,23 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import Nav from "../components/homeComponents/Nav";
-import { AiOutlineSearch } from "react-icons/ai";
-import axios from "axios";
-import Url from "../Utils/Url";
 import Everyone from "../components/searchComponents/Everyone";
 import { profileContext } from "../context/Api/ProfileContext";
 import Load from "../Utils/Load";
 
 const Search = () => {
   const [result, setresult] = useState([]);
-  // const [id,setid] = useEffect()
   const {searchprofiles} = useContext(profileContext)
   const [load,setload] = useState('invisible')
-
-  // const [pro, setpro] = useState();
-
-  // useEffect(() => {
-  //   console.log(pro);
-  // }, [pro]);
 
   return (
     <div className="flex ">

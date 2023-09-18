@@ -16,7 +16,6 @@ const Nav = () => {
   useEffect(()=>{
     checkauthentications()
     .then(data=>{
-      console.log(data)
      setid(data.userId)
     })
     .catch(error=>console.log(error))

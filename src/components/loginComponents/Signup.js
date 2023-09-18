@@ -3,24 +3,26 @@ import { useNavigate, Navigate, NavLink } from "react-router-dom";
 import axios from "axios";
 import "../../stylesheets/login.css";
 import { urlContext } from "../../context/UrlContex";
+import { BiLoader } from "react-icons/bi";
+
 
 const Signup = ({revcur,right}) => {
 
   const {url} = useContext(urlContext)
 
   const [issignedup, setissignnedup] = useState(false);
-  const [load, setload] = useState("invisible");
+  const [load, setload] = useState(false);
   const email = useRef();
   const password = useRef();
   const err = useRef();
   const name = useRef();
-console.log(right)
   const navigate = useNavigate();
 
   const sign = async () => {
     err.current.innerText = "";
 
     try {
+      setload(true)
       const n = await name.current.value;
       const e = await email.current.value;
       const p = await password.current.value;
@@ -40,16 +42,14 @@ console.log(right)
         data,
         headers
       );
-      console.log(login);
       const { detail } = login.data;
-      console.log(detail);
       if (detail) {
       
-setload('invisible')
+setload(false)
         navigate("/Dob", { state: { data: data, headers: headers } });
       }
     } catch (error) {
-      setload('invisible')
+      setload(false)
       console.log(error);
       err.current.innerText = error.response
         ? error.response.data.msg
@@ -88,16 +88,20 @@ setload('invisible')
               type="password"
             />
           </div>
-          <p className="error text-red-600 " ref={err}></p>
+          <p className="error text-red-600 w-logbox h-10 flex justify-center" ref={err}></p>
 
           <div className="bottomlogbox">
-            <div className={`${load},"loading"`}></div>
+           {
+            load ?
+            <BiLoader size={20} className="logsub my-4 bg-blue-600 text-white rounded w-ibox"/>            :
             <button
               className="logsub my-4 bg-blue-600 text-white rounded w-ibox"
               onClick={sign}
             >
               Sign up
             </button>
+           }
+            
           </div>
           <div className="flex items-center justify-center">
             <hr className="w-10 border border-gray" />
